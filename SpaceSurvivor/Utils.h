@@ -21,6 +21,11 @@ public:
 	static float constrain(float val, float min, float max);
 	static float map(float value, float inMin, float inMax, float outMin, float outMax);
 	static sf::Vector2f normalize(const sf::Vector2f& v);
+	static float getSign(float value);
+
+	static sf::Vector2f limitMagnitude(sf::Vector2f v, float max);
+	static sf::Vector2f setMagnitude(sf::Vector2f v, float newMag);
+	static float getMagnitude(sf::Vector2f v);
 
 	static float degreesToRadians(float degrees);
 	static float radiansToDegrees(float radians);

@@ -9,11 +9,12 @@ public:
 
 	void setCenter(sf::Vector2f position);
 
-	void follow(sf::Vector2f position, float dt);
+	void follow(sf::Vector2f position, sf::Vector2f spaceShipVelocity, float dt);
 
 	sf::View camera;
 
 private:
 	float ease;
+	sf::Vector2f size;
 };
 

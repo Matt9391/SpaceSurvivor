@@ -133,13 +133,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Background.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

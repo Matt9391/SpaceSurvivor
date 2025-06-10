@@ -75,6 +75,33 @@ sf::Vector2f Utils::normalize(const sf::Vector2f& v) {
 
 }
 
+float Utils::getSign(float value) {
+	if (value < 0) {
+		return -1.f;
+	}
+
+	return 1.f;
+}
+
+sf::Vector2f Utils::limitMagnitude(sf::Vector2f v, float max) {
+	float mag = std::sqrt(v.x * v.x + v.y * v.y);
+	if (mag > max) {
+		v /= mag;      // normalizza
+		v *= max;      // ridimensiona a lunghezza max
+	}
+	return v;
+}
+
+sf::Vector2f Utils::setMagnitude(sf::Vector2f v, float newMag) {
+	float mag = std::sqrt(v.x * v.x + v.y * v.y);
+	if (mag == 0.f) return sf::Vector2f(0.f, 0.f); // evita divisione per zero
+	return v / mag * newMag;
+}
+
+float Utils::getMagnitude(sf::Vector2f v) {
+	return std::sqrt(v.x * v.x + v.y * v.y);
+}
+
 
 float Utils::PI = 3.14159265f;
 
