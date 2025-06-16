@@ -13,7 +13,7 @@ public:
 	static float randomFloat(float min, float max);
 
 	static sf::Clock clock;
-	static double dt;
+	static float dt;
 	static void updateDt();
 	static float distance(float x1, float y1, float x2, float y2);
 	static float distance(sf::Vector2f a, sf::Vector2f b);

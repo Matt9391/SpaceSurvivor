@@ -22,7 +22,7 @@ unsigned int Utils::randomUInt(unsigned int min, unsigned int max) {
 }
 
 
-double Utils::dt = 0;
+float Utils::dt = 0.f;
 sf::Clock Utils::clock;
 
 void Utils::updateDt() {

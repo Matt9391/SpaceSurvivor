@@ -2,6 +2,11 @@ E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\Background.cpp;E:\Informa
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\Bullet.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\Bullet.obj
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\Camera2D.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\Camera2D.obj
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\Enemy.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\Enemy.obj
+E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\imgui\imgui-SFML.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\imgui-SFML.obj
+E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\imgui\imgui.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\imgui.obj
+E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\imgui\imgui_draw.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\imgui_draw.obj
+E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\imgui\imgui_tables.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\imgui_tables.obj
+E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\imgui\imgui_widgets.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\imgui_widgets.obj
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\main.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\main.obj
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceShip.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\SpaceShip.obj
 E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\Utils.cpp;E:\Informatica\GitHubRepos\SpaceSurvivor\SpaceSurvivor\SpaceSurvivor\x64\Debug\Utils.obj

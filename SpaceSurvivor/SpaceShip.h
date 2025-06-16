@@ -13,6 +13,7 @@ public:
 
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();
+	std::vector<Bullet>& getBullets();
 private:
 	void handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt);
 

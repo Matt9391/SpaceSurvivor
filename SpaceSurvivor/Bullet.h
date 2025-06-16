@@ -10,9 +10,14 @@ public:
 
 	void display(sf::RenderWindow& window);
 	
+	sf::Vector2f getPosition();
+	sf::Vector2f getSize();
+
+
 	bool toRemove;
 private:
 	sf::Vector2f position;
+	sf::Vector2f size;
 	sf::Vector2f velocity;
 	float angle;
 	float speed;
@@ -21,5 +26,7 @@ private:
 	sf::Clock lifetime;
 
 	sf::Sprite gfx;
+
+	sf::RectangleShape hitbox;
 };
 

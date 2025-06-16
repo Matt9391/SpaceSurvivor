@@ -18,6 +18,10 @@ public:
 	sf::Vector2f getSize();
 	sf::Vector2f evade(sf::Vector2f position, sf::Vector2f velocity, float maxSteeringForce);
 	void addForce(sf::Vector2f force);
+	
+	void deleteBullet();
+
+	bool toRemove;
 private:
 	void handleMovement(SpaceShip& spaceship, float dt);
 	//https://www.youtube.com/watch?v=Q4MU7pkDYmQ&list=PL0EXn74dzTecIxVyK03chZU0RIajfEApp&index=11
@@ -44,6 +48,9 @@ private:
 
 	std::vector<Bullet> bullets;
 	sf::Texture bulletText;
+
+	sf::RectangleShape hitbox;
+
 
 };
 

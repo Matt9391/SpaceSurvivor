@@ -1,6 +1,8 @@
 #include "SpaceShip.h"
 #include "Utils.h"
 #include <iostream>
+#include "imgui.h"
+#include "imgui-SFML.h"
 
 SpaceShip::SpaceShip(sf::Vector2f position,sf::Vector2f centerOfRotation, sf::Texture &text, sf::Texture& bulletText) :
 	position(position),
@@ -33,6 +35,10 @@ sf::Vector2f SpaceShip::getVelocity() {
 	return this->velocity;
 }
 
+std::vector<Bullet>& SpaceShip::getBullets() {
+	return this->bullets;
+}
+
 void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt) {
 	this->handleMovement(mousePosition, spaceshipPos, dt);
 
@@ -55,6 +61,7 @@ void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, fl
 			this->bullets.erase(this->bullets.begin() + i);
 		}
 	}
+
 
 }
 
@@ -81,7 +88,8 @@ void SpaceShip::handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshi
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 		float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
-		this->acceleration = sf::Vector2f(this->speed * cos(radAngle) * dt, this->speed * sin(radAngle) * dt);
+		this->acceleration = sf::Vector2f(this->speed * cos(radAngle), this->speed * sin(radAngle));
+		this->acceleration = Utils::normalize(this->acceleration) * this->speed * dt;
 
 	}
 	else {
@@ -90,8 +98,7 @@ void SpaceShip::handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshi
 
 	this->velocity += this->acceleration;
 	float maxSpeed = 50.f;
-	this->velocity.x = Utils::constrain(this->velocity.x, -maxSpeed, maxSpeed);
-	this->velocity.y = Utils::constrain(this->velocity.y, -maxSpeed, maxSpeed);
+	this->velocity = Utils::limitMagnitude(this->velocity, maxSpeed);
 
 	//std::cout << mousePosition.x << " angle " << this->angleRotation << std::endl;
 
@@ -109,4 +116,6 @@ void SpaceShip::display(sf::RenderWindow& window) {
 
 	//window.draw(this->hitbox);
 	window.draw(this->gfx);
+
+	ImGui::Text("bullets: %d", this->bullets.size());
 }
