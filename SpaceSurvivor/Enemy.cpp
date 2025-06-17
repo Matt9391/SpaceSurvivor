@@ -2,19 +2,21 @@
 #include "Utils.h"
 #include <iostream>
 
-Enemy::Enemy(sf::Vector2f position, sf::Texture& text, sf::Texture& bulletText) :
+Enemy::Enemy(sf::Vector2f position, bool freeze, sf::Texture& text, sf::Texture& bulletText) :
 	position(position),
 	size(sf::Vector2f(text.getSize().x * 0.8f, text.getSize().y * 0.7f)),
-	acceleration(0,0),
-	velocity(0,0),
+	acceleration(0, 0),
+	velocity(0, 0),
 	maxSpeed(Utils::randomFloat(30.f, 40.f)),
-	maxSteeringForce(Utils::randomFloat(0.5f,0.9f)),
+	maxSteeringForce(Utils::randomFloat(0.5f, 0.9f)),
 	maxSteeringEvadeForce(1),
 	angleRotation(0),
 	bulletText(bulletText),
 	canShoot(false),
 	shootCooldown(1.f),
-	toRemove(false)
+	startDelay(2.f),
+	toRemove(false),
+	freeze(freeze)
 	{
 		this->hitbox.setSize(sf::Vector2f(this->size.x, this->size.y));
 		this->hitbox.setOrigin(this->size.x / 2.f, this->size.y / 2.f);
@@ -30,6 +32,15 @@ Enemy::Enemy(sf::Vector2f position, sf::Texture& text, sf::Texture& bulletText) 
 	}
 
 void Enemy::update(SpaceShip &spaceship, float dt) {
+	if (this->shootTimer.getElapsedTime().asSeconds() > this->startDelay) {
+		this->shootTimer.restart();
+		this->freeze = false;
+	}
+
+	if (this->freeze) {
+		return;
+	}
+	
 	this->handleMovement(spaceship, dt);
 	
 
@@ -101,11 +112,11 @@ sf::Vector2f Enemy::curveEvade(SpaceShip& spaceship, float maxSteeringForce) {
 }
 
 sf::Vector2f Enemy::evade(sf::Vector2f position, sf::Vector2f velocity, float maxSteeringForce) {
-	return this->pursue(position, velocity, maxSteeringForce) * -10.f;
+	return this->pursue(position, velocity, maxSteeringForce) * -20.f;
 }
 
 sf::Vector2f Enemy::pursue(sf::Vector2f position, sf::Vector2f velocity, float maxSteeringForce) {
-	position += (velocity * 25.f);
+	position += (velocity * 15.f);
 
 	return this->seek(position, maxSteeringForce);
 }

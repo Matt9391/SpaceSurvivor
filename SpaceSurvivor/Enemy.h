@@ -7,7 +7,7 @@
 class Enemy
 {
 public:
-	Enemy(sf::Vector2f position, sf::Texture& text, sf::Texture& bulletText);
+	Enemy(sf::Vector2f position, bool freeze, sf::Texture& text, sf::Texture& bulletText);
 
 	void display(sf::RenderWindow& window);
 	void update(SpaceShip &spaceship, float dt);
@@ -47,8 +47,11 @@ private:
 	sf::Sprite gfx;
 
 	sf::Clock shootTimer;
+	float startDelay;
 	float shootCooldown;
 	bool canShoot;
+
+	bool freeze;
 
 	std::vector<Bullet> bullets;
 	sf::Texture bulletText;

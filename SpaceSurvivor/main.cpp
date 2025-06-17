@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include "Utils.h"
 #include "SpaceShip.h"
@@ -21,11 +22,19 @@ int main()
     window.setFramerateLimit(60);
 
     ImGui::SFML::Init(window);
+    ImGui::GetIO().FontGlobalScale = 1.3f;
 
     Camera2D camera(sf::Vector2f(1920, 1080), 10);
     sf::Vector2f midScreen(window.getSize().x / 2.f, window.getSize().y / 2.f);
     sf::Vector2f screenSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
 
+    sf::Sound song;
+    sf::SoundBuffer song1;
+    song1.loadFromFile("./Audio/game.wav");
+
+    song.setBuffer(song1);
+    song.setLoop(true);
+    
     sf::Texture bgTexture;
     bgTexture.loadFromFile("./Sprites/background3.png");
 
@@ -37,7 +46,6 @@ int main()
     sf::Texture playerTexture;
     playerTexture.loadFromFile("./Sprites/player.png");
 
-
     SpaceShip spaceship(sf::Vector2f(960, 540), midScreen, playerTexture, bulletTexture);
     Background background(bgTexture, spaceship.getPosition());
 
@@ -47,14 +55,14 @@ int main()
     std::vector<std::unique_ptr<Enemy>> enemies;
     //enemies.reserve(100);
 
-    int nEnemies = 500;
+    int nEnemies = 10;
     float incr = Utils::degreesToRadians(360.f / nEnemies);
     float angle = 0;
     for (int i = 0; i < nEnemies; i++) {
         float x = spaceship.getPosition().x + 700 * cos(angle);
         float y = spaceship.getPosition().y + 700 * sin(angle);
         // 1) crea un unique_ptr con make_unique
-        auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), enemyTexture, bulletTexture2);
+        auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), true, enemyTexture, bulletTexture2);
 
         // 2) usa -> per accedere ai metodi dell'Enemy
         enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
@@ -66,9 +74,18 @@ int main()
 
     bool movementMode = false;
     int framecount = 0;
-    while (window.isOpen())
-    {
-        framecount++;
+    float timeElapsedSeconds = 0.f;
+    float maxTimeElapsedSeconds = 0.f;
+    float spawnCooldown = 2.5f;
+
+    bool gameOn = false;
+    bool lastGameOn = false;
+
+    float maxSurviveTime = 0.f;
+    sf::Clock timeSurviving;
+
+    while (window.isOpen()){
+    
         Utils::updateDt();
 
         sf::Event event;
@@ -86,93 +103,159 @@ int main()
             }
         }
 
-        if (framecount % 10 == 0) {
-            angle = Utils::randomFloat(0.f, 3.14f);
-            float x = spaceship.getPosition().x + 700 * cos(angle);
-            float y = spaceship.getPosition().y + 700 * sin(angle);
-            // 1) crea un unique_ptr con make_unique
-            auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), enemyTexture, bulletTexture2);
+       
+        if (gameOn) {
+            if (gameOn != lastGameOn) {
+                timeSurviving.restart();
+            }
 
-            // 2) usa -> per accedere ai metodi dell'Enemy
-            enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
+            timeElapsedSeconds += Utils::dt;
 
-            // 3) spingi lo smart pointer nel vector
-            enemies.push_back(std::move(enemyPtr));
-        }
+            #pragma region spawnEnemy logic
+            if (timeElapsedSeconds > spawnCooldown) {
+                maxTimeElapsedSeconds += timeElapsedSeconds;
+                spawnCooldown = Utils::map(maxTimeElapsedSeconds, 0.f, 120.f, 2.5f, 1.f);
+                timeElapsedSeconds = 0;
+                angle = Utils::randomFloat(0.f, 3.14f);
+                float x = spaceship.getPosition().x + 700 * cos(angle);
+                float y = spaceship.getPosition().y + 700 * sin(angle);
+                // 1) crea un unique_ptr con make_unique
+                auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y),false, enemyTexture, bulletTexture2);
 
-#pragma region Spaceship logic
+                // 2) usa -> per accedere ai metodi dell'Enemy
+                enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
 
-        sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y));
+                // 3) spingi lo smart pointer nel vector
+                enemies.push_back(std::move(enemyPtr));
+            }
+            #pragma endregion   
 
-        spaceship.setMode(movementMode);
+            #pragma region Enemies logic
 
-        spaceship.update(
-            mousePos,
-            sf::Vector2f(
-                static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).x),
-                static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).y)),
-            Utils::dt);
+                    for (int i = 0; i < enemies.size(); i++) {
+                        enemies[i]->update(spaceship, Utils::dt);
+                        for (int j = 0; j < enemies.size(); j++) {
+                            if (i != j && Utils::distance(enemies[i]->getPosition(), enemies[j]->getPosition()) < enemies[i]->getSize().x * 1.f) {
+                                sf::Vector2f force = enemies[i]->evade(enemies[j]->getPosition(), enemies[j]->getVelocity(), 1);
+                                enemies[i]->addForce(force);
+                            }
 
-#pragma endregion
+                            //enemy bullet collide with spaceship
+                            std::vector<Bullet>& eBullets = enemies[i]->getBullets();
+                            for (Bullet& b : eBullets) {
+                                if (b.toRemove == false && checkBulletCollision(b, spaceship.getPosition(), spaceship.getSize())){
+                                    b.toRemove = true;
+                                    spaceship.damage(5);
+                                }
+                            }
+                        }
 
-#pragma region Enemies logic
+                        teleportEnemyOutOfBounds(enemies[i], spaceship, window, screenSize);
 
+                        std::vector<Bullet>& bullets = spaceship.getBullets();
 
-        for (int i = 0; i < enemies.size(); i++) {
+                        for (Bullet& b : bullets) {
+                            if (b.toRemove == false && checkBulletCollision(b, enemies[i]->getPosition(), enemies[i]->getSize())) {
+                                std::cout << "hit" << std::endl;
+                                b.toRemove = true;
+                                enemies[i]->toRemove = true;
+                            }
+                        }
 
-            enemies[i]->update(spaceship, Utils::dt);
-            for (int j = 0; j < enemies.size(); j++) {
-                if (i != j && Utils::distance(enemies[i]->getPosition(), enemies[j]->getPosition()) < enemies[i]->getSize().x * 1.f) {
-                    sf::Vector2f force = enemies[i]->evade(enemies[j]->getPosition(), enemies[j]->getVelocity(), 1);
-                    enemies[i]->addForce(force);
-                }
-
-                std::vector<Bullet>& eBullets = enemies[i]->getBullets();
-                for (Bullet& b : eBullets) {
-                    if (b.toRemove == false && checkBulletCollision(b, spaceship.getPosition(), spaceship.getSize())){
-                        b.toRemove = true;
                     }
+
+
+
+
+                    for (int i = enemies.size() - 1; i >= 0; i--) {
+                        if (enemies[i]->toRemove) {
+                            enemies[i]->deleteSelf();
+                            enemies.erase(enemies.begin() + i);
+                        }
+                    }
+            #pragma endregion
+
+            #pragma region Spaceship logic
+
+            sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y));
+
+            spaceship.setMode(movementMode);
+
+            spaceship.update(
+                mousePos,
+                sf::Vector2f(
+                    static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).x),
+                    static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).y)),
+                Utils::dt);
+
+            if (spaceship.getHp() <= 0) {
+                gameOn = false;
+                spaceship.setHp(100.f);
+                spaceship.setPosition(midScreen);
+                spaceship.setVelocity(sf::Vector2f(0, 0));
+                enemies.clear();
+                int nEnemies = 10;
+                float incr = Utils::degreesToRadians(360.f / nEnemies);
+                float angle = 0;
+                for (int i = 0; i < nEnemies; i++) {
+                    float x = spaceship.getPosition().x + 700 * cos(angle);
+                    float y = spaceship.getPosition().y + 700 * sin(angle);
+                    // 1) crea un unique_ptr con make_unique
+                    auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), true, enemyTexture, bulletTexture2);
+
+                    // 2) usa -> per accedere ai metodi dell'Enemy
+                    enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
+
+                    // 3) spingi lo smart pointer nel vector
+                    enemies.push_back(std::move(enemyPtr));
+                    angle += incr;
                 }
-            }
 
-            teleportEnemyOutOfBounds(enemies[i], spaceship, window, screenSize);
-
-            std::vector<Bullet>& bullets = spaceship.getBullets();
-
-            for (Bullet& b : bullets) {
-                if (b.toRemove == false && checkBulletCollision(b, enemies[i]->getPosition(), enemies[i]->getSize())) {
-                    std::cout << "hit" << std::endl;
-                    b.toRemove = true;
-                    enemies[i]->toRemove = true;
+                camera.setCenter(spaceship.getPosition());
+                if (song.getStatus() == sf::Sound::Playing) {
+                    song.play();
                 }
-            }
 
+                if (timeSurviving.getElapsedTime().asSeconds() > maxSurviveTime) {
+                    maxSurviveTime = timeSurviving.getElapsedTime().asSeconds();
+                }
+                
+            }
+    #pragma endregion
+
+
+            camera.follow(spaceship.getPosition(), spaceship.getVelocity(), Utils::dt);
+
+            lastGameOn = gameOn;
+            
         }
 
-
-
-
-        for (int i = enemies.size() - 1; i >= 0; i--) {
-            if (enemies[i]->toRemove) {
-                enemies[i]->deleteSelf();
-                enemies.erase(enemies.begin() + i);
-            }
-        }
-#pragma endregion
-
+            
         background.update(spaceship.getPosition());
-
-        camera.follow(spaceship.getPosition(), spaceship.getVelocity(), Utils::dt);
-        //camera.setCenter(spaceship.getPosition());
 
         ImGui::SFML::Update(window, sf::seconds(Utils::dt));
 
-        ImGui::Begin("Debug");
-        ImGui::Text("DeltaTime: %.3f", Utils::dt);
-        ImGui::Checkbox("Mouse: ", &movementMode);
-        ImGui::Text("movement: %d", movementMode);
-        ImGui::Text("n Enemies: %d", enemies.size());
+        ImGui::Begin("Game Menu");
+        ImGui::Text("Avoid, Kill and Survive as long as you can!");
+        ImGui::Text("\"Space\" to shoot");
+        ImGui::Text("\"w\" or LeftClick to move");
+        ImGui::Checkbox("Start Game", &gameOn);
+        ImGui::Text("Choose to move with \"w\" or with LeftClick: ");
+        ImGui::Checkbox("Keyboard mode", &movementMode);
+        ImGui::Text("Time survived: %.2f", gameOn ? timeSurviving.getElapsedTime().asSeconds() : 0.f);
+        ImGui::Text("Best time survived: %.2f", maxSurviveTime);
+      
+        
+        
+        if(ImGui::Button("Toggle Music")) {
+            if (song.getStatus() == sf::Sound::Playing) {
+                song.stop();
+            }
+            else {
+                song.play();
+            }
 
+        }
         //---------------------DISPLAY---------------------------
         window.setView(camera.camera);
         window.clear();
@@ -196,6 +279,7 @@ int main()
 
     return 0;
 }
+
 
 bool checkBulletCollision(Bullet& bullet, sf::Vector2f position, sf::Vector2f size) {
     sf::Vector2f bPos = bullet.getPosition();
