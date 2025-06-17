@@ -13,7 +13,10 @@ public:
 
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();
+	sf::Vector2f getSize();
 	std::vector<Bullet>& getBullets();
+
+	void setMode(bool mode);
 private:
 	void handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt);
 
@@ -37,6 +40,8 @@ private:
 
 	std::vector<Bullet> bullets;
 	sf::Texture bulletText;
+
+	bool movementMode;
 
 };
 

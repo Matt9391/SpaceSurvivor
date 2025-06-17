@@ -14,7 +14,8 @@ SpaceShip::SpaceShip(sf::Vector2f position,sf::Vector2f centerOfRotation, sf::Te
 	angleRotation(0),
 	bulletText(bulletText),
 	canShoot(true),
-	shootCooldown(0.2f)
+	shootCooldown(0.02f),
+	movementMode(false)
 	{
 		
 		this->hitbox.setSize(sf::Vector2f(this->size.x, this->size.y));
@@ -37,6 +38,14 @@ sf::Vector2f SpaceShip::getVelocity() {
 
 std::vector<Bullet>& SpaceShip::getBullets() {
 	return this->bullets;
+}
+
+void SpaceShip::setMode(bool mode) {
+	this->movementMode = mode;
+}
+
+sf::Vector2f SpaceShip::getSize() {
+	return sf::Vector2f((float)this->gfx.getTexture()->getSize().x, (float)this->gfx.getTexture()->getSize().y);
 }
 
 void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt) {
@@ -70,30 +79,33 @@ void SpaceShip::handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshi
 
 	this->angleRotation = Utils::radiansToDegrees(atan2(mousePosition.y - spaceshipPos.y, mousePosition.x - spaceshipPos.x)) + 90.f;
 	
-	//int dy = 0;
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-	//	dy = 1;
-	//}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-	//	dy = -1;
-	//}
+	if (this->movementMode) {
+		float angle = 0;
+		int dy = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			dy = 1;
+		}
 
-	//if (dy != 0) {
-	//	float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
-	//	this->acceleration = sf::Vector2f(this->speed * cos(radAngle) * dt, this->speed * sin(radAngle) * dt * dy);
-	//}
-	//else {
-	//	this->velocity *= 0.96f;
-	//}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-		float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
-		this->acceleration = sf::Vector2f(this->speed * cos(radAngle), this->speed * sin(radAngle));
-		this->acceleration = Utils::normalize(this->acceleration) * this->speed * dt;
-
+		if (dy != 0) {
+			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
+			this->acceleration = sf::Vector2f(this->speed * cos(radAngle) * dt, this->speed * sin(radAngle) * dt * dy);
+		}
+		else {
+			this->velocity *= 0.96f;
+		}
 	}
 	else {
-		this->velocity *= 0.96f;
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
+			this->acceleration = sf::Vector2f(this->speed * cos(radAngle), this->speed * sin(radAngle));
+			this->acceleration = Utils::normalize(this->acceleration) * this->speed * dt;
+
+		}
+		else {
+			this->velocity *= 0.96f;
+		}
 	}
 
 	this->velocity += this->acceleration;

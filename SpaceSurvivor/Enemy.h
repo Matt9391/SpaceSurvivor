@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "SpaceShip.h"
+#include <vector>
+
 
 #pragma once
 class Enemy
@@ -16,10 +18,12 @@ public:
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();
 	sf::Vector2f getSize();
+	std::vector<Bullet>& getBullets();
+
 	sf::Vector2f evade(sf::Vector2f position, sf::Vector2f velocity, float maxSteeringForce);
 	void addForce(sf::Vector2f force);
 	
-	void deleteBullet();
+	void deleteSelf();
 
 	bool toRemove;
 private:

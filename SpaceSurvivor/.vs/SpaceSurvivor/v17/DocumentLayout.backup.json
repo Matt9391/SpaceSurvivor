@@ -11,12 +11,24 @@
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:SpaceShip.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Background.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Background.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Utils.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Utils.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Camera2D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Enemy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Bullet.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -31,36 +43,24 @@
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:imgui\\imconfig.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Enemy.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Camera2D.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\SpaceShip.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:SpaceShip.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Bullet.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Bullet.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Camera2D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Camera2D.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Background.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Background.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Background.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A6676C19-F5DD-45AF-98EE-349C6365B0DF}|SpaceSurvivor.vcxproj|solutionrelative:Background.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -86,44 +86,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "imgui-SFML.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\imgui\\imgui-SFML.h",
               "RelativeDocumentMoniker": "imgui\\imgui-SFML.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\imgui\\imgui-SFML.h",
               "RelativeToolTip": "imgui\\imgui-SFML.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAADAAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-06-16T19:22:49.917Z"
+              "WhenOpened": "2025-06-16T19:22:49.917Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "imconfig.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\imgui\\imconfig.h",
               "RelativeDocumentMoniker": "imgui\\imconfig.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\imgui\\imconfig.h",
               "RelativeToolTip": "imgui\\imconfig.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAAAA4AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-06-16T19:21:55.883Z"
+              "WhenOpened": "2025-06-16T19:21:55.883Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "Bullet.cpp",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Bullet.cpp",
               "RelativeDocumentMoniker": "Bullet.cpp",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Bullet.cpp",
               "RelativeToolTip": "Bullet.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAABEAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-10T09:53:00.269Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "Bullet.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Bullet.h",
               "RelativeDocumentMoniker": "Bullet.h",
@@ -135,31 +137,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "Enemy.cpp",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.cpp",
               "RelativeDocumentMoniker": "Enemy.cpp",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.cpp",
               "RelativeToolTip": "Enemy.cpp",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFEAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAswIcAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-06-10T10:51:28.317Z"
+              "WhenOpened": "2025-06-10T10:51:28.317Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "Enemy.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.h",
               "RelativeDocumentMoniker": "Enemy.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Enemy.h",
               "RelativeToolTip": "Enemy.h",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAABQAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-06-09T20:42:24.047Z"
+              "WhenOpened": "2025-06-09T20:42:24.047Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 2,
               "Title": "Background.cpp",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Background.cpp",
               "RelativeDocumentMoniker": "Background.cpp",
@@ -167,11 +171,12 @@
               "RelativeToolTip": "Background.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-06-09T18:51:50.85Z"
+              "WhenOpened": "2025-06-09T18:51:50.85Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "Background.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Background.h",
               "RelativeDocumentMoniker": "Background.h",
@@ -183,31 +188,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 5,
               "Title": "Camera2D.cpp",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.cpp",
               "RelativeDocumentMoniker": "Camera2D.cpp",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.cpp",
               "RelativeToolTip": "Camera2D.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-06-07T21:39:38.538Z"
+              "WhenOpened": "2025-06-07T21:39:38.538Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 10,
               "Title": "Camera2D.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.h",
               "RelativeDocumentMoniker": "Camera2D.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Camera2D.h",
               "RelativeToolTip": "Camera2D.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-06-07T21:38:10.2Z"
+              "WhenOpened": "2025-06-07T21:38:10.2Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Utils.cpp",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Utils.cpp",
               "RelativeDocumentMoniker": "Utils.cpp",
@@ -226,7 +233,7 @@
               "RelativeDocumentMoniker": "Utils.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\Utils.h",
               "RelativeToolTip": "Utils.h",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAmwA4AAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-06-07T21:24:30.073Z",
               "EditorCaption": ""
@@ -239,22 +246,23 @@
               "RelativeDocumentMoniker": "SpaceShip.cpp",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\SpaceShip.cpp",
               "RelativeToolTip": "SpaceShip.cpp",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAAAHYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-10T10:07:21.163Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "SpaceShip.h",
               "DocumentMoniker": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\SpaceShip.h",
               "RelativeDocumentMoniker": "SpaceShip.h",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\SpaceShip.h",
               "RelativeToolTip": "SpaceShip.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-06-07T21:14:56.74Z"
+              "WhenOpened": "2025-06-07T21:14:56.74Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -264,7 +272,7 @@
               "RelativeDocumentMoniker": "main.cpp",
               "ToolTip": "E:\\Informatica\\GitHubRepos\\SpaceSurvivor\\SpaceSurvivor\\main.cpp*",
               "RelativeToolTip": "main.cpp*",
-              "ViewState": "AgIAAHsAAAAAAAAAAAAAAJQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAADIAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-07T21:23:59.372Z",
               "EditorCaption": ""

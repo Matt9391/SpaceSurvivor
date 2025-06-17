@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "Utils.h"
 #include "SpaceShip.h"
 #include "Camera2D.h"
@@ -11,23 +12,22 @@
 #include "imgui-SFML.h"
 
 void handleResize(sf::RenderWindow& window, Camera2D& camera, unsigned int width, unsigned int height);
-void teleportEnemyOutOfBounds(Enemy& enemy, SpaceShip& spaceship, sf::RenderWindow& window, sf::Vector2f screenSize);
+void teleportEnemyOutOfBounds(std::unique_ptr<Enemy>& enemy, SpaceShip& spaceship, sf::RenderWindow& window, sf::Vector2f screenSize);
 bool checkBulletCollision(Bullet& bullet, sf::Vector2f position, sf::Vector2f size);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1920,1080), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
     window.setFramerateLimit(60);
 
     ImGui::SFML::Init(window);
-    //ImGui::SFML::Init(window);
 
     Camera2D camera(sf::Vector2f(1920, 1080), 10);
     sf::Vector2f midScreen(window.getSize().x / 2.f, window.getSize().y / 2.f);
-    sf::Vector2f screenSize(window.getSize().x, window.getSize().y);
+    sf::Vector2f screenSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
 
     sf::Texture bgTexture;
-    bgTexture.loadFromFile("./Sprites/background2.png");
+    bgTexture.loadFromFile("./Sprites/background3.png");
 
     sf::Texture bulletTexture;
     bulletTexture.loadFromFile("./Sprites/bullet1.png");
@@ -40,25 +40,35 @@ int main()
 
     SpaceShip spaceship(sf::Vector2f(960, 540), midScreen, playerTexture, bulletTexture);
     Background background(bgTexture, spaceship.getPosition());
-    
+
     sf::Texture enemyTexture;
     enemyTexture.loadFromFile("./Sprites/enemy.png");
 
-    std::vector<Enemy> enemies;
-    int nEnemies = 30;
+    std::vector<std::unique_ptr<Enemy>> enemies;
+    //enemies.reserve(100);
+
+    int nEnemies = 500;
     float incr = Utils::degreesToRadians(360.f / nEnemies);
     float angle = 0;
     for (int i = 0; i < nEnemies; i++) {
         float x = spaceship.getPosition().x + 700 * cos(angle);
         float y = spaceship.getPosition().y + 700 * sin(angle);
-        enemies.push_back(Enemy(sf::Vector2f(x,y), enemyTexture, bulletTexture2));
-        enemies[i].setVelocity(Utils::normalize(enemies[i].getPosition() - spaceship.getPosition()));
+        // 1) crea un unique_ptr con make_unique
+        auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), enemyTexture, bulletTexture2);
+
+        // 2) usa -> per accedere ai metodi dell'Enemy
+        enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
+
+        // 3) spingi lo smart pointer nel vector
+        enemies.push_back(std::move(enemyPtr));
         angle += incr;
     }
-    
 
+    bool movementMode = false;
+    int framecount = 0;
     while (window.isOpen())
     {
+        framecount++;
         Utils::updateDt();
 
         sf::Event event;
@@ -76,47 +86,79 @@ int main()
             }
         }
 
+        if (framecount % 10 == 0) {
+            angle = Utils::randomFloat(0.f, 3.14f);
+            float x = spaceship.getPosition().x + 700 * cos(angle);
+            float y = spaceship.getPosition().y + 700 * sin(angle);
+            // 1) crea un unique_ptr con make_unique
+            auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), enemyTexture, bulletTexture2);
 
+            // 2) usa -> per accedere ai metodi dell'Enemy
+            enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
 
-        sf::Vector2f mousePos(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+            // 3) spingi lo smart pointer nel vector
+            enemies.push_back(std::move(enemyPtr));
+        }
+
+#pragma region Spaceship logic
+
+        sf::Vector2f mousePos(static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y));
+
+        spaceship.setMode(movementMode);
 
         spaceship.update(
             mousePos,
             sf::Vector2f(
-                window.mapCoordsToPixel(spaceship.getPosition()).x, 
-                window.mapCoordsToPixel(spaceship.getPosition()).y), 
+                static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).x),
+                static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).y)),
             Utils::dt);
 
-        
+#pragma endregion
+
+#pragma region Enemies logic
+
+
         for (int i = 0; i < enemies.size(); i++) {
-            std::vector<Bullet>& bullets = spaceship.getBullets();
 
-            for (Bullet& b : bullets) {
-                if (b.toRemove == false && checkBulletCollision(b, enemies[i].getPosition(), enemies[i].getSize())) {
-                    std::cout << "hit" << std::endl;
-                    b.toRemove = true;
-                    enemies[i].toRemove = true;
-                }
-            }
-
-            enemies[i].update(spaceship, Utils::dt);
+            enemies[i]->update(spaceship, Utils::dt);
             for (int j = 0; j < enemies.size(); j++) {
-                if (i != j && Utils::distance(enemies[i].getPosition(), enemies[j].getPosition()) < enemies[i].getSize().x * 1.f) {
-                    sf::Vector2f force = enemies[i].evade(enemies[j].getPosition(), enemies[j].getVelocity(), 1);
-                    enemies[i].addForce(force);
+                if (i != j && Utils::distance(enemies[i]->getPosition(), enemies[j]->getPosition()) < enemies[i]->getSize().x * 1.f) {
+                    sf::Vector2f force = enemies[i]->evade(enemies[j]->getPosition(), enemies[j]->getVelocity(), 1);
+                    enemies[i]->addForce(force);
+                }
+
+                std::vector<Bullet>& eBullets = enemies[i]->getBullets();
+                for (Bullet& b : eBullets) {
+                    if (b.toRemove == false && checkBulletCollision(b, spaceship.getPosition(), spaceship.getSize())){
+                        b.toRemove = true;
+                    }
                 }
             }
 
             teleportEnemyOutOfBounds(enemies[i], spaceship, window, screenSize);
-            
+
+            std::vector<Bullet>& bullets = spaceship.getBullets();
+
+            for (Bullet& b : bullets) {
+                if (b.toRemove == false && checkBulletCollision(b, enemies[i]->getPosition(), enemies[i]->getSize())) {
+                    std::cout << "hit" << std::endl;
+                    b.toRemove = true;
+                    enemies[i]->toRemove = true;
+                }
+            }
+
         }
 
+
+
+
         for (int i = enemies.size() - 1; i >= 0; i--) {
-            if (enemies[i].toRemove) {
-                enemies[i].deleteBullet();
+            if (enemies[i]->toRemove) {
+                enemies[i]->deleteSelf();
                 enemies.erase(enemies.begin() + i);
             }
         }
+#pragma endregion
 
         background.update(spaceship.getPosition());
 
@@ -127,16 +169,20 @@ int main()
 
         ImGui::Begin("Debug");
         ImGui::Text("DeltaTime: %.3f", Utils::dt);
+        ImGui::Checkbox("Mouse: ", &movementMode);
+        ImGui::Text("movement: %d", movementMode);
+        ImGui::Text("n Enemies: %d", enemies.size());
 
+        //---------------------DISPLAY---------------------------
         window.setView(camera.camera);
         window.clear();
 
         background.display(window);
 
-        for (Enemy &e : enemies) {
-            e.display(window);
+        for (auto& e : enemies) {
+            e->display(window);
         }
-        
+
         spaceship.display(window);
 
 
@@ -145,6 +191,7 @@ int main()
 
         window.display();
     }
+
     ImGui::SFML::Shutdown();
 
     return 0;
@@ -159,13 +206,13 @@ bool checkBulletCollision(Bullet& bullet, sf::Vector2f position, sf::Vector2f si
         bPos.y > position.y - size.y / 2.f) {
         return true;
     }
-    
+
     return false;
 }
 
-void teleportEnemyOutOfBounds(Enemy& enemy, SpaceShip& spaceship,sf::RenderWindow &window, sf::Vector2f screenSize) {
-    sf::Vector2f pixelPos = static_cast<sf::Vector2f>(window.mapCoordsToPixel(enemy.getPosition()));
-    sf::Vector2f newPos = enemy.getPosition();
+void teleportEnemyOutOfBounds(std::unique_ptr<Enemy>& enemy, SpaceShip& spaceship, sf::RenderWindow& window, sf::Vector2f screenSize) {
+    sf::Vector2f pixelPos = static_cast<sf::Vector2f>(window.mapCoordsToPixel(enemy->getPosition()));
+    sf::Vector2f newPos = enemy->getPosition();
     bool moved = false;
 
     if (pixelPos.x < 0) {
@@ -187,12 +234,12 @@ void teleportEnemyOutOfBounds(Enemy& enemy, SpaceShip& spaceship,sf::RenderWindo
     }
 
     if (moved) {
-        enemy.setPosition(newPos);
+        enemy->setPosition(newPos);
 
         // Reindirizza verso il player
         sf::Vector2f toPlayer = spaceship.getPosition() - newPos;
-        sf::Vector2f newVel = Utils::setMagnitude(Utils::normalize(toPlayer), Utils::getMagnitude(enemy.getVelocity()));
-        enemy.setVelocity(newVel);
+        sf::Vector2f newVel = Utils::setMagnitude(Utils::normalize(toPlayer), Utils::getMagnitude(enemy->getVelocity()));
+        enemy->setVelocity(newVel);
     }
 }
 

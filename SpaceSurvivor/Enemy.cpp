@@ -57,6 +57,11 @@ void Enemy::update(SpaceShip &spaceship, float dt) {
 	}
 
 }
+
+std::vector<Bullet>& Enemy::getBullets() {
+	return this->bullets;
+}
+
 void Enemy::handleMovement(SpaceShip& spaceship, float dt) {
 	this->acceleration = sf::Vector2f(0, 0);
 	if (Utils::distance(spaceship.getPosition(), this->position) < this->size.x * 2.f && Utils::getMagnitude(spaceship.getVelocity()) > 5.f) {
@@ -77,7 +82,7 @@ void Enemy::addForce(sf::Vector2f force) {
 	this->acceleration += force;
 }
 
-void Enemy::deleteBullet() {
+void Enemy::deleteSelf() {
 	this->bullets.clear();
 }
 
@@ -128,7 +133,7 @@ sf::Vector2f Enemy::getVelocity() {
 	return this->velocity;
 }
 sf::Vector2f Enemy::getSize() {
-	return sf::Vector2f(this->gfx.getTexture()->getSize().x, this->gfx.getTexture()->getSize().y);
+	return sf::Vector2f((float)this->gfx.getTexture()->getSize().x, (float)this->gfx.getTexture()->getSize().y);
 }
 
 void Enemy::display(sf::RenderWindow& window) {
@@ -136,10 +141,13 @@ void Enemy::display(sf::RenderWindow& window) {
 	this->gfx.setPosition(this->position);
 	this->gfx.setRotation(this->angleRotation);
 
-	for (Bullet& b : this->bullets) {
-		b.display(window);
-	}
+	if (!this->toRemove) {
 
-	//window.draw(this->hitbox);
-	window.draw(this->gfx);
+		for (Bullet& b : this->bullets) {
+			b.display(window);
+		}
+
+		//window.draw(this->hitbox);
+		window.draw(this->gfx);
+	}
 }
