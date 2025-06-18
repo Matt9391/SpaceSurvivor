@@ -12,8 +12,11 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+//with this you can resize the window, all made by chatGPT in fact it doesnt work right
 void handleResize(sf::RenderWindow& window, Camera2D& camera, unsigned int width, unsigned int height);
+//function that moves enemy out of bounds
 void teleportEnemyOutOfBounds(std::unique_ptr<Enemy>& enemy, SpaceShip& spaceship, sf::RenderWindow& window, sf::Vector2f screenSize);
+//simple check collision
 bool checkBulletCollision(Bullet& bullet, sf::Vector2f position, sf::Vector2f size);
 
 int main()
@@ -24,10 +27,11 @@ int main()
     ImGui::SFML::Init(window);
     ImGui::GetIO().FontGlobalScale = 1.3f;
 
-    Camera2D camera(sf::Vector2f(1920, 1080), 10);
     sf::Vector2f midScreen(window.getSize().x / 2.f, window.getSize().y / 2.f);
     sf::Vector2f screenSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
-
+    Camera2D camera(sf::Vector2f(screenSize.x * 0.9, screenSize.y * 0.9), 10);
+    
+    //resource loading
     sf::Sound song;
     sf::SoundBuffer song1;
     song1.loadFromFile("./Audio/game.wav");
@@ -46,14 +50,19 @@ int main()
     sf::Texture playerTexture;
     playerTexture.loadFromFile("./Sprites/player.png");
 
-    SpaceShip spaceship(sf::Vector2f(960, 540), midScreen, playerTexture, bulletTexture);
+    //initialize class
+    SpaceShip spaceship(midScreen, playerTexture, bulletTexture);
     Background background(bgTexture, spaceship.getPosition());
 
     sf::Texture enemyTexture;
     enemyTexture.loadFromFile("./Sprites/enemy.png");
 
+
+    //after hours of problem due to normale vector i decided with the help of chatGPT
+    //to use unique_ptr, because otherwise each time i would change the array, so add/remove an element
+    //some enemies would lose their texture reference due to their change of address in memory, with unique_ptr 
+    //it doesn't happen anymore so that why i'm using it
     std::vector<std::unique_ptr<Enemy>> enemies;
-    //enemies.reserve(100);
 
     int nEnemies = 10;
     float incr = Utils::degreesToRadians(360.f / nEnemies);
@@ -61,26 +70,29 @@ int main()
     for (int i = 0; i < nEnemies; i++) {
         float x = spaceship.getPosition().x + 700 * cos(angle);
         float y = spaceship.getPosition().y + 700 * sin(angle);
-        // 1) crea un unique_ptr con make_unique
+      
         auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), true, enemyTexture, bulletTexture2);
 
-        // 2) usa -> per accedere ai metodi dell'Enemy
         enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
 
-        // 3) spingi lo smart pointer nel vector
         enemies.push_back(std::move(enemyPtr));
         angle += incr;
     }
 
+    //key/mouse movement mode
     bool movementMode = false;
-    int framecount = 0;
+    //time alive
     float timeElapsedSeconds = 0.f;
+    //max time alive this session/life
     float maxTimeElapsedSeconds = 0.f;
+    //spawn cooldown of enemies
     float spawnCooldown = 2.5f;
 
+    //variable that control the game, if paused or not
     bool gameOn = false;
     bool lastGameOn = false;
 
+    //a record of the longest time survive
     float maxSurviveTime = 0.f;
     sf::Clock timeSurviving;
 
@@ -114,18 +126,19 @@ int main()
             #pragma region spawnEnemy logic
             if (timeElapsedSeconds > spawnCooldown) {
                 maxTimeElapsedSeconds += timeElapsedSeconds;
-                spawnCooldown = Utils::map(maxTimeElapsedSeconds, 0.f, 120.f, 2.5f, 1.f);
+                //change dynamically the spawncooldown
+                spawnCooldown = Utils::map(maxTimeElapsedSeconds, 0.f, 120.f, 2.5f, 0.7f);
                 timeElapsedSeconds = 0;
+                
+                //yes i could do a functio for the spawn, but im lazy as hell
                 angle = Utils::randomFloat(0.f, 3.14f);
                 float x = spaceship.getPosition().x + 700 * cos(angle);
                 float y = spaceship.getPosition().y + 700 * sin(angle);
-                // 1) crea un unique_ptr con make_unique
+                
                 auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y),false, enemyTexture, bulletTexture2);
 
-                // 2) usa -> per accedere ai metodi dell'Enemy
                 enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
 
-                // 3) spingi lo smart pointer nel vector
                 enemies.push_back(std::move(enemyPtr));
             }
             #pragma endregion   
@@ -133,14 +146,17 @@ int main()
             #pragma region Enemies logic
 
                     for (int i = 0; i < enemies.size(); i++) {
+
                         enemies[i]->update(spaceship, Utils::dt);
+
+                        //for each enemy it has to avoid others enemy (just visually)
                         for (int j = 0; j < enemies.size(); j++) {
                             if (i != j && Utils::distance(enemies[i]->getPosition(), enemies[j]->getPosition()) < enemies[i]->getSize().x * 1.f) {
                                 sf::Vector2f force = enemies[i]->evade(enemies[j]->getPosition(), enemies[j]->getVelocity(), 1);
                                 enemies[i]->addForce(force);
                             }
 
-                            //enemy bullet collide with spaceship
+                            //enemy bullets collide with spaceship
                             std::vector<Bullet>& eBullets = enemies[i]->getBullets();
                             for (Bullet& b : eBullets) {
                                 if (b.toRemove == false && checkBulletCollision(b, spaceship.getPosition(), spaceship.getSize())){
@@ -154,18 +170,15 @@ int main()
 
                         std::vector<Bullet>& bullets = spaceship.getBullets();
 
+                        //for each bullet of the spaceship it check if collide with each enemy
                         for (Bullet& b : bullets) {
-                            if (b.toRemove == false && checkBulletCollision(b, enemies[i]->getPosition(), enemies[i]->getSize())) {
-                                std::cout << "hit" << std::endl;
+                            if (b.toRemove == false && checkBulletCollision(b, enemies[i]->getPosition(), enemies[i]->getSize())){
                                 b.toRemove = true;
                                 enemies[i]->toRemove = true;
                             }
                         }
 
                     }
-
-
-
 
                     for (int i = enemies.size() - 1; i >= 0; i--) {
                         if (enemies[i]->toRemove) {
@@ -188,25 +201,28 @@ int main()
                     static_cast<float>(window.mapCoordsToPixel(spaceship.getPosition()).y)),
                 Utils::dt);
 
+            //if that reset the game, i COULD HAVE DONE A FUNCTION, but again im lazy, i will do it for the intake
             if (spaceship.getHp() <= 0) {
                 gameOn = false;
+                
                 spaceship.setHp(100.f);
                 spaceship.setPosition(midScreen);
                 spaceship.setVelocity(sf::Vector2f(0, 0));
+
                 enemies.clear();
+                
                 int nEnemies = 10;
                 float incr = Utils::degreesToRadians(360.f / nEnemies);
                 float angle = 0;
+                
                 for (int i = 0; i < nEnemies; i++) {
                     float x = spaceship.getPosition().x + 700 * cos(angle);
                     float y = spaceship.getPosition().y + 700 * sin(angle);
-                    // 1) crea un unique_ptr con make_unique
+                    
                     auto enemyPtr = std::make_unique<Enemy>(sf::Vector2f(x, y), true, enemyTexture, bulletTexture2);
 
-                    // 2) usa -> per accedere ai metodi dell'Enemy
                     enemyPtr->setVelocity(Utils::normalize(enemyPtr->getPosition() - spaceship.getPosition()));
 
-                    // 3) spingi lo smart pointer nel vector
                     enemies.push_back(std::move(enemyPtr));
                     angle += incr;
                 }
@@ -235,6 +251,7 @@ int main()
 
         ImGui::SFML::Update(window, sf::seconds(Utils::dt));
 
+        //IMGUI gui
         ImGui::Begin("Game Menu");
         ImGui::Text("Avoid, Kill and Survive as long as you can!");
         ImGui::Text("\"Space\" to shoot");
@@ -244,8 +261,6 @@ int main()
         ImGui::Checkbox("Keyboard mode", &movementMode);
         ImGui::Text("Time survived: %.2f", gameOn ? timeSurviving.getElapsedTime().asSeconds() : 0.f);
         ImGui::Text("Best time survived: %.2f", maxSurviveTime);
-      
-        
         
         if(ImGui::Button("Toggle Music")) {
             if (song.getStatus() == sf::Sound::Playing) {
@@ -256,6 +271,7 @@ int main()
             }
 
         }
+
         //---------------------DISPLAY---------------------------
         window.setView(camera.camera);
         window.clear();
@@ -295,10 +311,14 @@ bool checkBulletCollision(Bullet& bullet, sf::Vector2f position, sf::Vector2f si
 }
 
 void teleportEnemyOutOfBounds(std::unique_ptr<Enemy>& enemy, SpaceShip& spaceship, sf::RenderWindow& window, sf::Vector2f screenSize) {
+    //madly in love with: window.mapCoordsToPixel and window.mapPixelToCoords
+    //it makes everythings a lot easier
+    
     sf::Vector2f pixelPos = static_cast<sf::Vector2f>(window.mapCoordsToPixel(enemy->getPosition()));
     sf::Vector2f newPos = enemy->getPosition();
     bool moved = false;
 
+    //if out of bounds it moves that coordinate at the other bound
     if (pixelPos.x < 0) {
         newPos.x = window.mapPixelToCoords(sf::Vector2i(static_cast<int>(screenSize.x), 0)).x;
         moved = true;
@@ -320,7 +340,7 @@ void teleportEnemyOutOfBounds(std::unique_ptr<Enemy>& enemy, SpaceShip& spaceshi
     if (moved) {
         enemy->setPosition(newPos);
 
-        // Reindirizza verso il player
+        // rotate the enemy towards the spaceship
         sf::Vector2f toPlayer = spaceship.getPosition() - newPos;
         sf::Vector2f newVel = Utils::setMagnitude(Utils::normalize(toPlayer), Utils::getMagnitude(enemy->getVelocity()));
         enemy->setVelocity(newVel);

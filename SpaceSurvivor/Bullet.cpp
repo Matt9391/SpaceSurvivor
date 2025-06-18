@@ -3,10 +3,10 @@
 #include <cmath>
 #include <iostream>
 
-Bullet::Bullet(sf::Vector2f position, float speed, float angle, sf::Texture& text) :
+Bullet::Bullet(sf::Vector2f position, float angle, sf::Texture& text) :
 	position(position),
 	size(text.getSize().x * 0.25f, text.getSize().y * 0.3f),
-	speed(speed),
+	speed(70),
 	angle(angle),
 	lifespan(1.5f),
 	toRemove(false)
@@ -19,6 +19,7 @@ Bullet::Bullet(sf::Vector2f position, float speed, float angle, sf::Texture& tex
 		this->gfx.setOrigin(text.getSize().x / 2.f, text.getSize().y / 2.f);
 		this->gfx.setRotation(angle);
 
+		//radians for calculus, degrees for graphics
 		float radAngle = Utils::degreesToRadians(angle);
 
 		this->velocity = sf::Vector2f(cos(radAngle) * this->speed, sin(radAngle) * this->speed);
@@ -30,6 +31,7 @@ void Bullet::update(float dt) {
 
 	this->position += this->velocity;
 
+	//if lifetime > lifespan end it
 	if ((this->lifetime.getElapsedTime()).asSeconds() > this->lifespan) {
 		this->toRemove = true;
 	}

@@ -7,28 +7,30 @@
 class SpaceShip
 {
 public:
-	SpaceShip(sf::Vector2f position, sf::Vector2f centerOfRotation, sf::Texture& text, sf::Texture& bulletText);
+	SpaceShip(sf::Vector2f position, sf::Texture& text, sf::Texture& bulletText);
 
 	void update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt);
 	void display(sf::RenderWindow& window);
-
+	
+	//setters
 	void setPosition(sf::Vector2f position);
 	void setVelocity(sf::Vector2f velocity);
 	void setHp(float hp);
+	void setMode(bool mode);
 
+	//getters
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();
 	sf::Vector2f getSize();
 	std::vector<Bullet>& getBullets();
 	int getHp();
 
-	void setMode(bool mode);
+	//others
 	void damage(int damage);
 
 
 private:
 	void handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt);
-
 
 	sf::Vector2f position;
 	sf::Vector2f size;
@@ -36,10 +38,8 @@ private:
 	sf::Vector2f acceleration;
 	float speed;
 
-	sf::RectangleShape hitbox;
-
-	sf::Vector2f centerOfRotation;
 	sf::Sprite gfx;
+	sf::RectangleShape hitbox;
 
 	float angleRotation;
 
@@ -61,7 +61,7 @@ private:
 	sf::SoundBuffer soundBuffer;
 
 	sf::Sprite powerSprite;
-	bool moving;
+	bool powering;
 
 };
 

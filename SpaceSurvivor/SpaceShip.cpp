@@ -6,9 +6,8 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-SpaceShip::SpaceShip(sf::Vector2f position, sf::Vector2f centerOfRotation, sf::Texture& text, sf::Texture& bulletText) :
+SpaceShip::SpaceShip(sf::Vector2f position, sf::Texture& text, sf::Texture& bulletText) :
 	position(position),
-	centerOfRotation(centerOfRotation),
 	size(text.getSize().x * 0.7f, text.getSize().y * 0.8f),
 	speed(50),
 	velocity(sf::Vector2f(0, 0)),
@@ -18,7 +17,7 @@ SpaceShip::SpaceShip(sf::Vector2f position, sf::Vector2f centerOfRotation, sf::T
 	canShoot(true),
 	shootCooldown(0.2f),
 	movementMode(false),
-	moving(false),
+	powering(false),
 	hp(100)
 	{
 		
@@ -32,6 +31,7 @@ SpaceShip::SpaceShip(sf::Vector2f position, sf::Vector2f centerOfRotation, sf::T
 
 		this->shootTimer.restart();
 
+		//bar that shows hps
 		this->hpBar.setPosition(this->hitbox.getPosition() + sf::Vector2f(0.f, 55.f));
 		this->hpBar.setSize(sf::Vector2f(100.f, 10.f));
 		this->hpBar.setOrigin(50.f, 5.f);
@@ -41,41 +41,16 @@ SpaceShip::SpaceShip(sf::Vector2f position, sf::Vector2f centerOfRotation, sf::T
 
 		this->soundBuffer.loadFromFile("./Audio/shootSound.wav");
 		this->shootSound.setBuffer(this->soundBuffer);
-
+		
+		//visual effect if you are moving
 		this->powerSprite.setTexture(bulletText);
 		this->powerSprite.setOrigin(bulletText.getSize().x / 2.f, bulletText.getSize().y / 2.f);
 		this->powerSprite.setPosition(this->gfx.getPosition());
 		this->powerSprite.setRotation(this->angleRotation);
 	}
+//PUBLIC:
 
-sf::Vector2f SpaceShip::getPosition() {
-	return this->position;
-}
-sf::Vector2f SpaceShip::getVelocity() {
-	return this->velocity;
-}
-
-std::vector<Bullet>& SpaceShip::getBullets() {
-	return this->bullets;
-}
-
-void SpaceShip::setMode(bool mode) {
-	this->movementMode = mode;
-}
-
-sf::Vector2f SpaceShip::getSize() {
-	return sf::Vector2f((float)this->gfx.getTexture()->getSize().x, (float)this->gfx.getTexture()->getSize().y);
-}
-
-void SpaceShip::damage(int damage) {
-	this->hp -= damage;
-	this->hp = Utils::constrain(this->hp, 0, 100);
-}
-
-int SpaceShip::getHp() {
-	return this->hp;
-}
-
+//setters
 void SpaceShip::setPosition(sf::Vector2f position) {
 	this->position = position;
 }
@@ -84,6 +59,80 @@ void SpaceShip::setVelocity(sf::Vector2f velocity) {
 }
 void SpaceShip::setHp(float hp) {
 	this->hp = hp;
+}
+void SpaceShip::setMode(bool mode) {
+	this->movementMode = mode;
+}
+
+//getters
+sf::Vector2f SpaceShip::getPosition() {
+	return this->position;
+}
+sf::Vector2f SpaceShip::getVelocity() {
+	return this->velocity;
+}
+sf::Vector2f SpaceShip::getSize() {
+	return this->size;
+}
+std::vector<Bullet>& SpaceShip::getBullets() {
+	return this->bullets;
+}
+int SpaceShip::getHp() {
+	return this->hp;
+}
+
+//others
+void SpaceShip::damage(int damage) {
+	this->hp -= damage;
+	this->hp = Utils::constrain(this->hp, 0, 100);
+}
+
+//PRIVATE:
+
+void SpaceShip::handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt) {
+	this->acceleration = sf::Vector2f(0, 0);
+
+	this->angleRotation = Utils::radiansToDegrees(atan2(mousePosition.y - spaceshipPos.y, mousePosition.x - spaceshipPos.x)) + 90.f;
+	
+	this->powering = false;
+
+	//if keyboard mode enabled
+	if (this->movementMode) {
+		float angle = 0;
+		int dy = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			dy = 1;
+		}
+
+		//if key pressed it moves forward in the direction of the angle
+		if (dy != 0) {
+			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
+			this->acceleration = sf::Vector2f(this->speed * cos(radAngle) * dt, this->speed * sin(radAngle) * dt * dy);
+			this->powering = true;
+		}
+		else {
+			this->velocity *= 0.96f;
+		}
+	}
+	else {
+		//if mouse mode enabled it moves forward in the direction of the angle
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
+			this->acceleration = sf::Vector2f(this->speed * cos(radAngle), this->speed * sin(radAngle));
+			this->acceleration = Utils::normalize(this->acceleration) * this->speed * dt;
+			this->powering = true;
+		}
+		else {
+			this->velocity *= 0.96f;
+		}
+	}
+
+	this->velocity += this->acceleration;
+	float maxSpeed = 50.f;
+	this->velocity = Utils::limitMagnitude(this->velocity, maxSpeed);
+
+	this->position += this->velocity;
 }
 
 void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt) {
@@ -94,7 +143,7 @@ void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, fl
 	}
 
 	if (this->canShoot && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		bullets.push_back(Bullet(this->position, 70, this->angleRotation - 90.f, this->bulletText));
+		bullets.push_back(Bullet(this->position, this->angleRotation - 90.f, this->bulletText));
 		this->canShoot = false;
 		this->shootSound.play();
 		this->shootTimer.restart();
@@ -113,62 +162,18 @@ void SpaceShip::update(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, fl
 	float lengthX = Utils::map(this->hp, 0.f, 100.f, 0.f, 100.f);
 	this->hpBar.setSize(sf::Vector2f(lengthX, 10.f));
 
-
 }
 
-void SpaceShip::handleMovement(sf::Vector2f mousePosition, sf::Vector2f spaceshipPos, float dt) {
-	this->acceleration = sf::Vector2f(0, 0);
-
-	this->angleRotation = Utils::radiansToDegrees(atan2(mousePosition.y - spaceshipPos.y, mousePosition.x - spaceshipPos.x)) + 90.f;
-	
-	this->moving = false;
-
-	if (this->movementMode) {
-		float angle = 0;
-		int dy = 0;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			dy = 1;
-		}
-
-		if (dy != 0) {
-			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
-			this->acceleration = sf::Vector2f(this->speed * cos(radAngle) * dt, this->speed * sin(radAngle) * dt * dy);
-			this->moving = true;
-		}
-		else {
-			this->velocity *= 0.96f;
-		}
-	}
-	else {
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-			float radAngle = Utils::degreesToRadians(this->angleRotation) - Utils::PI / 2.f;
-			this->acceleration = sf::Vector2f(this->speed * cos(radAngle), this->speed * sin(radAngle));
-			this->acceleration = Utils::normalize(this->acceleration) * this->speed * dt;
-			this->moving = true;
-		}
-		else {
-			this->velocity *= 0.96f;
-		}
-	}
-
-	this->velocity += this->acceleration;
-	float maxSpeed = 50.f;
-	this->velocity = Utils::limitMagnitude(this->velocity, maxSpeed);
-
-	//std::cout << mousePosition.x << " angle " << this->angleRotation << std::endl;
-
-	this->position += this->velocity;
-}
 
 void SpaceShip::display(sf::RenderWindow& window) {
 	this->hitbox.setPosition(this->position);
 	this->gfx.setPosition(this->position);
 	this->gfx.setRotation(this->angleRotation);
 	this->hpBar.setPosition(this->hitbox.getPosition() + sf::Vector2f(0.f, 50.f));
+
 	float radAngle = Utils::degreesToRadians(this->angleRotation);
-	float offsetDistance = 40.f; // distanza dal centro verso il basso
+	//its just rotate the powerSprite in order to be at the end of the spaceship
+	float offsetDistance = 40.f;
 	sf::Vector2f offset = sf::Vector2f(
 		0.f - std::sin(radAngle) * offsetDistance,
 		0.f + std::cos(radAngle) * offsetDistance
@@ -181,7 +186,7 @@ void SpaceShip::display(sf::RenderWindow& window) {
 	}
 
 	//window.draw(this->hitbox);
-	if (this->moving) {
+	if (this->powering) {
 		window.draw(this->powerSprite);
 	}
 	window.draw(this->gfx);

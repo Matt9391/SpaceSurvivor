@@ -15,12 +15,17 @@ public:
 	static sf::Clock clock;
 	static float dt;
 	static void updateDt();
+
 	static float distance(float x1, float y1, float x2, float y2);
 	static float distance(sf::Vector2f a, sf::Vector2f b);
+
 	static int constrain(int val, int min, int max);
 	static float constrain(float val, float min, float max);
+
 	static float map(float value, float inMin, float inMax, float outMin, float outMax);
+
 	static sf::Vector2f normalize(const sf::Vector2f& v);
+
 	static float getSign(float value);
 
 	static sf::Vector2f limitMagnitude(sf::Vector2f v, float max);

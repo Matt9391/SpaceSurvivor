@@ -4,7 +4,7 @@
 class Bullet
 {
 public:
-	Bullet(sf::Vector2f position, float speed, float angle, sf::Texture &text);
+	Bullet(sf::Vector2f position, float angle, sf::Texture &text);
 
 	void update(float dt);
 
@@ -14,11 +14,14 @@ public:
 	sf::Vector2f getSize();
 
 
+	//ik its not that right to have this variabile public but i'm used to it, i dont wanna do another get/set
 	bool toRemove;
 private:
+
 	sf::Vector2f position;
 	sf::Vector2f size;
 	sf::Vector2f velocity;
+
 	float angle;
 	float speed;
 
@@ -26,7 +29,7 @@ private:
 	sf::Clock lifetime;
 
 	sf::Sprite gfx;
-
 	sf::RectangleShape hitbox;
+
 };
 

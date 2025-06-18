@@ -14,7 +14,6 @@ void Camera2D::setCenter(sf::Vector2f position) {
 	this->camera.setCenter(position);
 }
 
-
 void Camera2D::follow(sf::Vector2f position, sf::Vector2f spaceShipVelocity, float dt) {
 	sf::Vector2f direction = position - this->camera.getCenter();
 	
