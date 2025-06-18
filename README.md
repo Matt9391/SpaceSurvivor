@@ -3,9 +3,9 @@
 
   SFML C++ game + IMGUI
 
-#Controls:
+##Controls:
 **LeftClcik** or **'w'** to move forward
 **Mouse** to aim
 **Space** to shoot
 
-#Try to survive as long as you can!
+##Try to survive as long as you can!
